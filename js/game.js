@@ -129,11 +129,23 @@ var Game=function(){
       }
     }
   }
+  var fixed=function(){
+    for(var i=0;i<cur.length;i++){
+      for(var j=0;j<cur[i].length;j++){
+        if(check(cur.origin,i,j)){
+          if(gameData[cur.origin.x+i][cur.origin.y+j]==2){
+            gameData[cur.origin.x+i][cur.origin.y+j]==1;
+          }
+        }
+      }
+    }
+    refreshDiv(gameData,gameDivs)
+  }
   var init=function(doms){
     gameDiv=doms.gameDiv;
     nextDiv=doms.nextDiv;
-    cur=new Square();
-    next=new Square();
+    cur=squareFactory.prototype.make(2,2);
+    next=squareFactory.prototype.make(3,3);
 
 
     initDiv(gameDiv,gameData,gameDivs);
@@ -148,5 +160,6 @@ var Game=function(){
   this.left=left;
   this.right=right;
   this.up=up;
+  this.fixed=fixed;
   this.down=down;
 }

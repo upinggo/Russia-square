@@ -59,12 +59,13 @@ Square.prototype.left=function(){
 Square.prototype.right=function(){
   this.origin.y+=1;
 }
-Square.prototype.up=function(){
-  this.dir=this.dir+1;
-
-  if(this.dir==4){
-    this.dir=0;
+Square.prototype.up=function(num){
+  if(!num){
+    num =1;
   }
+  this.dir=(this.dir+num)%4;
+
+  
   for(var i=0;i<this.data.length;i++){
     for(var j=0;j<this.data[0].length;j++){
       this.data[i][j]=this.uprotate[this.dir][i][j];
