@@ -1,1 +1,3 @@
-var Remote
+var Remote=function(){
+
+}
