@@ -72,6 +72,9 @@ var Game=function(){
       cur.down();
       setData();
       refreshDiv(gameData,gameDivs)
+      return true;
+    }else{
+      return false;
     }
 
   };
@@ -129,37 +132,110 @@ var Game=function(){
       }
     }
   }
+  var checkClear=function(){
+    var line=0;
+      for(var i=gameData.length-1;i>=0;i--){
+        var clear=true;
+        for(var j=0;j<gameData[0].length;j++){
+          if(gameData[i][j]!=1){
+            clear=false;
+            break;
+          }
+        }
+          if(clear){
+            for(var m=i;m>0;m--){
+              for(var n=0;n<gameData[0].length;n++){
+                gameData[m][n]=gameData[m-1][n];
+              }
+            }
+            for(var n=0;n<gameData[0].length;n++){
+              gameData[0][n]=0;
+            }
+            i++;
+            line++;
+        }
+      }
+      return line;
+  }
+  var gameover=function(){
+    var over=false;
+    for(var i=0;i<gameData[0].length;i++){
+      if(gameData[1][i]==1){
+        over=true;
+
+      }
+    }
+    return over;
+  }
+  //方块底部固定
   var fixed=function(){
-    for(var i=0;i<cur.length;i++){
-      for(var j=0;j<cur[i].length;j++){
+    for(var i=0;i<cur.data.length;i++){
+      for(var j=0;j<cur.data[i].length;j++){
         if(check(cur.origin,i,j)){
           if(gameData[cur.origin.x+i][cur.origin.y+j]==2){
-            gameData[cur.origin.x+i][cur.origin.y+j]==1;
+            gameData[cur.origin.x+i][cur.origin.y+j]=1;
           }
         }
       }
     }
     refreshDiv(gameData,gameDivs)
   }
-  var init=function(doms){
+  var performNext=function(type,dir){
+    cur=next;
+    setData();
+    next=squareFactory.prototype.make(type,dir);
+    refreshDiv(next.data,nextDivs)
+  }
+  var init=function(doms,type,dir){
     gameDiv=doms.gameDiv;
     nextDiv=doms.nextDiv;
-    cur=squareFactory.prototype.make(2,2);
-    next=squareFactory.prototype.make(3,3);
+    TimeDiv=doms.TimeDiv;
+    pointDiv=doms.pointDiv;
+    next=squareFactory.prototype.make(type,dir);
 
 
     initDiv(gameDiv,gameData,gameDivs);
     initDiv(nextDiv,next.data,nextDivs);
-    cur.origin.x=5;
-    cur.origin.y=5;
-    setData();
-    refreshDiv(gameData,gameDivs);
+
     refreshDiv(next.data,nextDivs);
   }
+  var TimeDiv;
+  var score=0;
+  var pointDiv
+var point=function(line){
+var s=0;
+switch (line) {
+  case 1:
+    s=10;
+    break;
+    case 2:
+      s=30;
+      break;
+      case 3:
+        s=60;
+        break;
+        case 4:
+          s=100;
+          break;
+  default:break;
+
+}
+score=score+s;
+pointDiv.innerHTML=score;
+}
+  var setTime=function(time){
+      TimeDiv.innerHTML=time;
+  }
+  this.gameover=gameover;
+  this.next
   this.init=init;
   this.left=left;
   this.right=right;
   this.up=up;
+  this.point=point;
+  this.setTime=setTime;
+  this.performNext=performNext;
+  this.checkClear=checkClear;
   this.fixed=fixed;
   this.down=down;
 }
