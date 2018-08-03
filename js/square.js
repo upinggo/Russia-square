@@ -65,7 +65,7 @@ Square.prototype.up=function(num){
   }
   this.dir=(this.dir+num)%4;
 
-  
+
   for(var i=0;i<this.data.length;i++){
     for(var j=0;j<this.data[0].length;j++){
       this.data[i][j]=this.uprotate[this.dir][i][j];
