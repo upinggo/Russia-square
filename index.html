@@ -1,1 +1,39 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./css/css.css">
+  <title>e</title>
+</head>
+<body>
+  <div class="square" id="local">
+    <div class="title">my game</div>
+    <div class="game" id="local_game"></div>
+    <div class="next" id="local_next"></div>
+    <div class="info">
+      <div>用时: <span id="local_time">0</span>s</div>
+      <div>得分<span id="local_score">0</span>分</div>
+    </div>
+</div>
+<div class="square" id="remote">
+  <div class="title">other game</div>
+  <div class="game" id="remote_game"></div>
+  <div class="next" id="remote_next"></div>
+  <div class="info">
+    <div>用时: <span id="remote_time">0</span>s</div>
+    <div>得分<span id="remote_score">0</span>分</div>
+  </div>
+</div>
+<script src="./js/square.js"></script>
+<script src="./js/game.js"></script>
+
+<script src="./js/remote.js"></script>
+
+<script src="./js/local.js"></script>
+<script src="./js/squareFactory.js"></script>
+<script src="./js/script.js"></script>
+</body>
+</html>
