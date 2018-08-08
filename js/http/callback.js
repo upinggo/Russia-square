@@ -5,4 +5,5 @@ function we(callback,something){
     something+='is cool';
     callback(something);
 }
-we(callback,'fjakdsj')
+we(callback,'fjakdsj');
+var p

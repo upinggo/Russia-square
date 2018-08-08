@@ -19,7 +19,7 @@ function async(url){
                 //printInfo(courseData);
             }).on('error',function(e){
                 reject(e)
-                console.log("出错啦！！！")
+                console.log("出错啦！！！");
             });
         
         })
