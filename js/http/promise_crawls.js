@@ -1,11 +1,51 @@
 var http=require('http');
-var url='http://www.imooc.com/learn/384';
-var Promise=require('Promise');
-// var Promise=require('blue-bird') 这个是Promise库 npm下载的
-var cheerio=require('cheerio')
+var baseUrl='http://www.imooc.com/learn/';
+var videoIds=[348,259,197,134,75];
+var Promise=require('bluebird');//这个是Promise库 npm下载的
+// var Promise=require('Promise') 
+var cheerio=require('cheerio');
+function async(url){
+    return new Promise(function(resolve,reject){
+        console.log("正在爬去！用Promise"+url);
+        http.get(url,function(res){
+            var html='';
+            res.on('data',function(data){
+                html+=data;
+            })
+        
+            res.on('end',function(){
+                resolve(html);
+                //var courseData=filterChapters(html);
+                //printInfo(courseData);
+            }).on('error',function(e){
+                reject(e)
+                console.log("出错啦！！！")
+            });
+        
+        })
+    })
+}
+var fetchCourseArry=[];
+videoIds.forEach(function(id){
+    fetchCourseArry.push(async(baseUrl+id))
+})
+Promise.all(fetchCourseArry).then(function(pages){
+var coursesData=[];
+pages.forEach(function(html){
+    var courses=filterChapters(html);
+    coursesData.push(courses);
+})
+coursesData.sort(function(a,b){
+    return a.number<b.number
+})
+printInfo(coursesData);
+})
 function filterChapters(html){
     var $=cheerio.load(html);
     var chapters=$('.chapter');
+    var title=$('.chapter h3').text();
+    var number=$(".js-learn-num").text();
+
     // [{
     //     chapterTitle:'',
     //     video:[
@@ -13,7 +53,10 @@ function filterChapters(html){
     //         id:'',
     //     ]
     // }]
-    var courseData=[];
+    var courseData={videos:[],
+    number:number,
+    title:title,
+    };
     chapters.each(function(item){
         var chapter=$(this);
         var chapterTitle=chapter.find(".chapter-description").text();
@@ -31,33 +74,27 @@ function filterChapters(html){
             })
 
         })
-        courseData.push(chapterData)
+        courseData.videos.push(chapterData)
     })
     return courseData;
     
 }
 
 
-http.get(url,function(res){
-    var html='';
-    res.on('data',function(data){
-        html+=data;
+
+function printInfo(coursesData){
+    coursesData.forEach(function(courseData){
+        console.log(courseData.number+'people学过'+courseData.title+'\n');
     })
-
-    res.on('end',function(){
-        var courseData=filterChapters(html);
-        printInfo(courseData);
-    }).on('error',function(){
-        console.log("出错啦！！！")
-    });
-
-})
-function printInfo(courseData){
-    courseData.forEach(function(item){
-        var chapterTitle=item.chapterTitle;
+    coursesData.forEach(function(courseData){
+        console.log("###"+courseData.title+'\n');
+        courseData.videos.forEach(function(item){
+            var chapterTitle=item.chapterTitle;
         console.log(chapterTitle+'\n');
         item.videos.forEach(function(item){
             console.log("【"+item.id+"】"+item.title+"\n");
         });
+        })
+        
     })
 }
